@@ -7,7 +7,7 @@
   color: white;
 }
 
-html{
+html {
   height: 100vh;
 }
 
@@ -57,10 +57,13 @@ body {
 }
 
 .main-content {
-  flex: 1;
-  overflow-y: auto;
   width: 100%;
   margin-top: 30px;
+}
+
+.content-container{
+  overflow-y: auto;
+  height: 200px;
 }
 
 .task-input-section {
@@ -127,7 +130,7 @@ body {
   position: absolute;
   top: 5px;
   left: 5px;
-  width: calc(34.5% - 10px); /* Adjust based on 3 items */
+  width: calc(34.5% - 10px); 
   height: calc(100% - 10px);
   background-color: #1e293b;
   border-radius: 25px;
@@ -169,16 +172,30 @@ body {
   }
 }
 
-label {
+.checkbox-container {
   display: flex;
   align-items: center;
   width: 100%;
   background-color: #1e293b;
   padding: 20px;
   border-radius: 20px;
-  gap: 12px;
+  justify-content: space-between;
   cursor: pointer;
   user-select: none;
+}
+
+.check-item{
+  display: flex;
+  gap: 12px;
+}
+
+#delete{
+  fill:grey;
+  transition: 0.3s;
+}
+
+#delete:hover{
+  fill: red;
 }
 
 input[type="checkbox"] {
@@ -227,11 +244,17 @@ input[type="checkbox"]:checked {
 
 footer {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   width: 100%;
   max-width: 600px;
   position: sticky;
   bottom: 0;
+}
+
+.footer-indicator{
+  display: flex;
+  justify-content: space-between;
 }
 
 #green {
@@ -303,12 +326,24 @@ footer {
 }
 
 @keyframes dropBounceWait {
-  0% { top: -150px; }
-  10% { top: 40px; }
-  12% { top: 25px; }
-  15% { top: 30px; }
-  85% { top: 30px; }
-  100% { top: -150px; }
+  0% {
+    top: -150px;
+  }
+  10% {
+    top: 40px;
+  }
+  12% {
+    top: 25px;
+  }
+  15% {
+    top: 30px;
+  }
+  85% {
+    top: 30px;
+  }
+  100% {
+    top: -150px;
+  }
 }
 
 #close-btn {
@@ -323,7 +358,7 @@ footer {
   gap: 10px;
 }
 
-.empty-task{
+.empty-task {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -331,7 +366,7 @@ footer {
   gap: 10px;
 }
 
-.empty-icon-container{
+.empty-icon-container {
   background-color: #182335;
   height: 40px;
   width: 40px;
@@ -342,11 +377,11 @@ footer {
   align-items: center;
 }
 
-.empty-heading{
+.empty-heading {
   font-weight: 700;
   font-size: 20px;
 }
 
-.empty-text{
+.empty-text {
   color: #93a1b6;
 }
