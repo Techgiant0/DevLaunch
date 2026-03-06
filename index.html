@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="styles.css" />
+        <link rel="icon" href="assets/icon.svg" type="image/x-icon" />
+        <title>DevLaunch Task Manager</title>
+    </head>
+    <body>
+        <div class="container">
+            <div id="error-popup">
+                <div class="warning">
+                    <img src="assets/warning.svg" alt="Error Icon" aria-hidden="true">
+                    <p id="error-message">Task cannot be empty</p>
+                </div>
+                <button type="button" id="close-btn" aria-label="Close">
+                    <img src="assets/close.svg" alt="" aria-hidden="true">
+                </button>
+            </div>
+
+            <div class="header-section">
+                <div class="header">
+                    <h1>DevLaunch</h1>
+                    <img src="assets/icon.svg" alt="DevLaunch Icon" class="icon" />
+                </div>
+
+                <i>
+                    <small id="subtitle"></small>
+                </i>
+            </div>
+
+            <div class="main-content">
+                <div class="task-input-section">
+                    <input type="text" id="taskInput" placeholder="Enter a new task..." />
+                    <button id="addTaskButton">+ Add Task</button>
+                </div>
+
+                <ul class="filter-section" role="tablist">
+                    <li
+                        id="filterAll"
+                        class="filter-button active"
+                        data-filter="all"
+                        role="tab"
+                        tabindex="0"
+                    >
+                        All
+                    </li>
+                    <li
+                        id="filterActive"
+                        class="filter-button"
+                        data-filter="active"
+                        role="tab"
+                        tabindex="0"
+                    >
+                        Active
+                    </li>
+                    <li
+                        id="filterCompleted"
+                        class="filter-button"
+                        data-filter="completed"
+                        role="tab"
+                        tabindex="0"
+                    >
+                        Completed
+                    </li>
+                </ul>
+
+                <div class="content-container" id="content-container">
+                    <div id="all" class="content-panel active">
+                        
+                        <div class="empty-task">
+                            <div class="empty-icon-container">
+                                <img src="./assets/icon.svg" class="empty-icon" height="35px" width="35px"/>
+                            </div>
+                            <p class="empty-heading">No task yet.</p>
+                            <p class="empty-text">Your task list is empty. Add a task to begin 😁</p>
+                        </div>
+
+                    </div>
+
+                    <div id="active" class="content-panel">
+
+                        <div class="empty-task">
+                            <div class="empty-icon-container">
+                                <img src="./assets/icon.svg" class="empty-icon" height="35px" width="35px"/>
+                            </div>
+                            <p class="empty-heading">No task yet.</p>
+                            <p class="empty-text">Your Active task list is empty. Add a task to see it 😁</p>
+                        </div>
+
+                    </div>
+
+                    <div id="completed" class="content-panel">
+
+                        <div class="empty-task">
+                            <div class="empty-icon-container">
+                                <img src="./assets/icon.svg" class="empty-icon" height="35px" width="35px"/>
+                            </div>
+                            <p class="empty-heading">No task yet.</p>
+                            <p class="empty-text">Your Completed task list is empty. Complete a task to see it here 😁</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <hr class="footer-divider" />
+
+            <footer>
+                <div class="indicator">
+                    <span id="green"></span>
+                    <small id="indicator-text">SYSTEM OPERATIONAL</small>
+                </div>
+
+                <p id="taskCount"><span>1</span> active tasks remaining</p>
+            </footer>
+        </div>
+
+        <script src="main.js"></script>
+    </body>
+</html>
