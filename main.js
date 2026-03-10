@@ -10,7 +10,7 @@ const popup = document.getElementById("error-popup");
 const closeBtn = document.getElementById("close-btn");
 const contentContainer = document.getElementById("content-container");
 const emptyTask = document.getElementsByClassName("empty-task");
-const deleteBtn = document.getElementById('delete')
+const deleteBtn = document.getElementById("delete");
 const tasks = [];
 
 filterButtons.forEach((button) => {
@@ -46,18 +46,27 @@ document.addEventListener("DOMContentLoaded", () => {
   getAdvice();
 });
 
-addTaskBtn.addEventListener("click", Addtasks);
+addTaskBtn.addEventListener("click", addTasks);
 taskInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
-    Addtasks();
+    addTasks();
   }
 });
 document.addEventListener("DOMContentLoaded", () => {
   const savedTasks = localStorage.getItem("usersTask");
-  if (savedTasks) {
+  let parsedSavedTasks = [];
+  try {
+    if (savedTasks) {
+      parsedSavedTasks = JSON.parse(savedTasks);
+    }
+  } catch (e) {
+    console.error("Error parsing saved tasks from localStorage:", e);
+    localStorage.removeItem("usersTask");
+  }
+
+  if (Array.isArray(parsedSavedTasks) && parsedSavedTasks.length !== 0) {
     allTasks.innerHTML = "";
-    const parsedTasks = JSON.parse(savedTasks);
-    tasks.push(...parsedTasks);
+    tasks.push(...parsedSavedTasks);
     renderTasks();
   }
 });
@@ -75,7 +84,7 @@ popup.addEventListener("animationend", (e) => {
   }
 });
 
-function Addtasks() {
+function addTasks() {
   if (!taskInput.value.trim()) {
     popup.classList.remove("manual-close");
     void popup.offsetWidth;
@@ -105,7 +114,7 @@ function renderTasks() {
   const savedTasks = localStorage.getItem("usersTask");
   const parsedTask = JSON.parse(savedTasks);
   parsedTask.forEach((currentTask) => {
-    const eachTaskContainer = ` <div class="checkbox-container">
+    const eachTaskContainer = ` <div class="checkbox-container" data-id=${currentTask.id}>
               <div class="check-item">
                 <input type="checkbox" />
                 <span>${currentTask.taskName}</span>
@@ -123,7 +132,64 @@ function renderTasks() {
                   d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"
                 />
               </svg>
-            </div>b`;
+            </div>`;
     allTasks.insertAdjacentHTML("beforeend", eachTaskContainer);
   });
+  return parsedTask;
 }
+
+function getClickedTaskId(e) {
+  const taskElement = e.target.closest(".checkbox-container");
+  return Number(taskElement.dataset.id);
+}
+
+function getTasks() {
+  return JSON.parse(localStorage.getItem("usersTask"));
+}
+
+function removeTaskFromArr(elementId, tasks) {
+  return tasks.filter((task) => task.id !== elementId);
+}
+
+function saveUpdatedTasks(tasks) {
+  localStorage.setItem("usersTask", JSON.stringify(tasks));
+}
+
+function isTaskListEmpty(tasks) {
+  return tasks.length === 0;
+}
+
+function renderEmptyState() {
+  const emptyTask = `<div class="empty-task">
+    <div class="empty-icon-container">
+      <img src="./assets/icon.svg" class="empty-icon" height="35px" width="35px"/>
+    </div>
+    <p class="empty-heading">No task yet.</p>
+    <p class="empty-text">Your task list is empty. Add a task to begin 😁</p>
+  </div>`;
+  allTasks.insertAdjacentHTML("beforeend", emptyTask);
+}
+
+function removeTask(e) {
+  const elementId = getClickedTaskId(e);
+  const tasks = getTasks();
+  const updatedTasks = removeTaskFromArr(elementId, tasks);
+  saveUpdatedTasks(updatedTasks);
+  allTasks.innerHTML = "";
+  renderTasks();
+  if (isTaskListEmpty(updatedTasks)) {
+    renderEmptyState();
+  }
+}
+
+contentContainer.addEventListener("click", (e) => {
+  if (e.target.id === "delete") {
+    removeTask(e);
+  }
+});
+
+contentContainer.addEventListener("click", (e) => {
+  if (e.target.id === "delete") {
+    removeTask(e);
+  }
+});
