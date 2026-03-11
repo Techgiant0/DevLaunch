@@ -111,8 +111,7 @@ function saveTasks() {
 }
 
 function renderTasks() {
-  const savedTasks = localStorage.getItem("usersTask");
-  const parsedTask = JSON.parse(savedTasks);
+  const parsedTask = getTasks();
   parsedTask.forEach((currentTask) => {
     const eachTaskContainer = ` <div class="checkbox-container" data-id=${currentTask.id}>
               <div class="check-item">
@@ -147,8 +146,8 @@ function getTasks() {
   return JSON.parse(localStorage.getItem("usersTask"));
 }
 
-function removeTaskFromArr(elementId, tasks) {
-  return tasks.filter((task) => task.id !== elementId);
+function removeTaskFromArr(elementId, gottenTasks) {
+  return gottenTasks.filter((gottenTask) => gottenTask.id !== elementId);
 }
 
 function saveUpdatedTasks(tasks) {
@@ -172,8 +171,10 @@ function renderEmptyState() {
 
 function removeTask(e) {
   const elementId = getClickedTaskId(e);
-  const tasks = getTasks();
-  const updatedTasks = removeTaskFromArr(elementId, tasks);
+  const gottenTasks = getTasks();
+  const updatedTasks = removeTaskFromArr(elementId, gottenTasks);
+  tasks.length = 0;
+  tasks.push(...updatedTasks);
   saveUpdatedTasks(updatedTasks);
   allTasks.innerHTML = "";
   renderTasks();
@@ -181,12 +182,6 @@ function removeTask(e) {
     renderEmptyState();
   }
 }
-
-contentContainer.addEventListener("click", (e) => {
-  if (e.target.id === "delete") {
-    removeTask(e);
-  }
-});
 
 contentContainer.addEventListener("click", (e) => {
   if (e.target.id === "delete") {
