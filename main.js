@@ -101,7 +101,7 @@ function createTasks() {
   const taskInputVal = {
     taskName: taskInput.value,
   };
-  const taskObj = { ...taskInputVal, id: tasks.length + 1 };
+  const taskObj = { ...taskInputVal, id: tasks.length + 1, completed: false };
   tasks.push(taskObj);
   taskInput.value = "";
 }
@@ -115,8 +115,8 @@ function renderTasks() {
   parsedTask.forEach((currentTask) => {
     const eachTaskContainer = ` <div class="checkbox-container" data-id=${currentTask.id}>
               <div class="check-item">
-                <input type="checkbox" />
-                <span>${currentTask.taskName}</span>
+                <input type="checkbox" class='checkbox' />
+                <span class='text'>${currentTask.taskName}</span>
               </div>
 
               <svg
@@ -188,3 +188,60 @@ contentContainer.addEventListener("click", (e) => {
     removeTask(e);
   }
 });
+
+contentContainer.addEventListener("change", (e) => {
+  /* 
+  Filter Feature
+  when the checkbox on a task is clicked
+  get tasks from localstorage
+  get the checkbox clicked
+  switch completed key's value{
+    to switch this get the id and get the index of the id's
+    parent obj, spread it and switch the value of completed
+    with !
+  }
+  Strike the text out
+  change background color
+  if it was clicked in all, display in all complete
+  if it was clicked in active, display in all and complete
+  if it is unclicked display in all and active
+  track deletion in any tab
+*/
+
+  if (e.target.classList.contains("checkbox")) {
+    const clickedElemID = getClickedTaskId(e);
+    const tasksObj = getTasks();
+    const indexOfObj = getIndexOfObj(tasksObj, clickedElemID);
+    const objGottenByIndex = tasks[indexOfObj];
+    const switchCompletedValObj = switchCompletedVal(objGottenByIndex);
+    const checkBoxContainer = e.target.closest(".checkbox-container");
+    const textToStrike = checkBoxContainer.querySelector(".text");
+    replaceObj(indexOfObj, tasksObj, switchCompletedValObj);
+    saveUpdatedTasks(tasks);
+    stylingForCompleted(objGottenByIndex, textToStrike, checkBoxContainer);
+  }
+});
+
+function getIndexOfObj(tasksObj, clickedElemID) {
+  return tasksObj.findIndex((taskObj) => taskObj.id === clickedElemID);
+}
+
+function switchCompletedVal(objGottenByIndex) {
+  return { ...objGottenByIndex, completed: !objGottenByIndex.completed };
+}
+
+function replaceObj(indexOfObj, tasksObj, switchCompletedValObj) {
+  if (indexOfObj !== -1 && indexOfObj < tasksObj.length) {
+    return (tasks[indexOfObj] = switchCompletedValObj);
+  }
+}
+
+function stylingForCompleted(objGottenByIndex,textToStrike,checkBoxContainer) {
+  if (!objGottenByIndex.completed) {
+    textToStrike.style.textDecoration = "line-through";
+    checkBoxContainer.style.opacity = "0.5";
+  } else {
+    textToStrike.style.textDecoration = "none";
+    checkBoxContainer.style.opacity = "1";
+  }
+}
