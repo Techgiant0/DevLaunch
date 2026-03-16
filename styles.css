@@ -61,7 +61,7 @@ body {
   margin-top: 30px;
 }
 
-.content-container{
+.content-container {
   overflow-y: auto;
   height: 200px;
 }
@@ -130,7 +130,7 @@ body {
   position: absolute;
   top: 5px;
   left: 5px;
-  width: calc(34.5% - 10px); 
+  width: calc(34.5% - 10px);
   height: calc(100% - 10px);
   background-color: #1e293b;
   border-radius: 25px;
@@ -184,17 +184,17 @@ body {
   user-select: none;
 }
 
-.check-item{
+.check-item {
   display: flex;
   gap: 12px;
 }
 
-#delete{
-  fill:grey;
+#delete {
+  fill: grey;
   transition: 0.3s;
 }
 
-#delete:hover{
+#delete:hover {
   fill: red;
 }
 
@@ -252,7 +252,7 @@ footer {
   bottom: 0;
 }
 
-.footer-indicator{
+.footer-indicator {
   display: flex;
   justify-content: space-between;
 }
@@ -384,4 +384,12 @@ footer {
 
 .empty-text {
   color: #93a1b6;
+}
+
+.completed {
+  opacity: 0.5;
+}
+
+.completed .text {
+  text-decoration: line-through;
 }
