@@ -31,8 +31,8 @@ body {
 
 .header {
   display: flex;
-  justify-content: left;
   width: 600px;
+  justify-content: flex-end;
   flex-direction: row-reverse;
   gap: 5px;
 }
@@ -57,11 +57,15 @@ body {
 }
 
 .main-content {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   margin-top: 30px;
 }
 
 .content-container {
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   height: 200px;
 }
@@ -156,7 +160,6 @@ body {
 .content-panel.active {
   display: flex;
   flex-direction: column;
-  width: 100%;
   gap: 15px;
   animation: fadeInSlide 0.4s ease forwards;
 }
@@ -384,6 +387,7 @@ footer {
 
 .empty-text {
   color: #93a1b6;
+  text-align: center;
 }
 
 .completed {
@@ -392,4 +396,66 @@ footer {
 
 .completed .text {
   text-decoration: line-through;
+}
+
+@media (width <= 768px) {
+  body {
+    height: auto;
+    min-height: 100svh;
+    align-items: flex-start;
+    padding-top: 5vh;
+  }
+
+  .content-panel.active {
+    width: 90%;
+    align-self: center;
+  }
+
+  .content-container {
+    overflow-y: scroll;
+    height: 300px;
+  }
+
+  .filter-section {
+    width: 90%;
+    align-self: center;
+  }
+
+  .header {
+    width: 90%;
+  }
+
+  .header-section {
+    width: 90%;
+  }
+  .task-input-section {
+    flex-direction: column;
+    width: 90%;
+    align-self: center;
+  }
+
+  #taskInput {
+    width: 100%;
+  }
+
+  #subtitle-dash {
+    border-left: 2px solid #4b54c8;
+    height: auto;
+  }
+
+  #subtitleSec {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+  }
+
+  footer {
+    width: 90%;
+    position: static;
+  }
+
+  .filter-section::before {
+    width: calc((100% - 10px) / 3);
+    height: calc(100% - 10px);
+  }
 }
