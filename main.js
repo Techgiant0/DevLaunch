@@ -4,10 +4,15 @@ const subtitle = document.getElementById("subtitle");
 const taskInput = document.getElementById("taskInput");
 const addTaskBtn = document.getElementById("addTaskButton");
 const allTasksContainer = document.getElementById("all");
+const activeTasksContainer = document.getElementById("active");
+const completedTaskContainer = document.getElementById("completed");
 const contentContainer = document.getElementById("content-container");
 const popup = document.getElementById("error-popup");
 const closeBtn = document.getElementById("close-btn");
+const filterSection = document.getElementById("filter-section");
+const activeTaskID = document.getElementById('activeTaskCount')
 
+let currentFilter = "all";
 let tasks = [];
 
 /* ---------------- FILTER BUTTONS ---------------- */
@@ -30,7 +35,8 @@ filterButtons.forEach((button) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   loadTasks();
-  renderTasks();
+  const filteredTask = getFilteredTasks(currentFilter);
+  renderTasks(filteredTask);
   fetchAdvice();
 });
 
@@ -74,7 +80,8 @@ function addTask() {
   taskInput.value = "";
 
   saveTasks();
-  renderTasks();
+  const filteredTask = getFilteredTasks(currentFilter);
+  renderTasks(filteredTask);
 }
 
 /* ---------------- STORAGE ---------------- */
@@ -98,16 +105,26 @@ function loadTasks() {
 
 /* ---------------- RENDER ---------------- */
 
-function renderTasks() {
-  allTasksContainer.innerHTML = "";
+function renderTasks(filteredTask) {
+  clearAllContainer();
+  let targetContainer;
 
-  if (tasks.length === 0) {
-    renderEmptyState();
-    return;
+  if (currentFilter === "all") {
+    targetContainer = allTasksContainer;
+  } else if (currentFilter === "active") {
+    targetContainer = activeTasksContainer;
+  } else {
+    targetContainer = completedTaskContainer;
   }
 
-  tasks.forEach((task) => {
-    const taskHTML = `
+  activeTaskCount()
+
+  if (!filteredTask || filteredTask.length === 0) {
+    renderEmptyState(targetContainer);
+    return;
+  } else {
+    filteredTask.forEach((task) => {
+      const taskHTML = `
     <div class="checkbox-container ${task.completed ? "completed" : ""}" data-id="${
       task.id
     }">
@@ -141,13 +158,14 @@ function renderTasks() {
     </div>
     `;
 
-    allTasksContainer.insertAdjacentHTML("beforeend", taskHTML);
-  });
+      targetContainer.insertAdjacentHTML("beforeend", taskHTML);
+    });
+  }
 }
 
 /* ---------------- EMPTY STATE ---------------- */
 
-function renderEmptyState() {
+function renderEmptyState(targetContainer) {
   const emptyHTML = `
   <div class="empty-task">
     <div class="empty-icon-container">
@@ -160,7 +178,7 @@ function renderEmptyState() {
   </div>
   `;
 
-  allTasksContainer.insertAdjacentHTML("beforeend", emptyHTML);
+  targetContainer.insertAdjacentHTML("beforeend", emptyHTML);
 }
 
 /* ---------------- DELETE TASK ---------------- */
@@ -173,7 +191,8 @@ contentContainer.addEventListener("click", (e) => {
     tasks = tasks.filter((task) => task.id !== id);
 
     saveTasks();
-    renderTasks();
+    const filteredTask = getFilteredTasks(currentFilter);
+    renderTasks(filteredTask);
   }
 });
 
@@ -191,7 +210,8 @@ contentContainer.addEventListener("change", (e) => {
     task.completed = !task.completed;
 
     saveTasks();
-    renderTasks();
+    const filteredTask = getFilteredTasks(currentFilter);
+    renderTasks(filteredTask);
   }
 });
 
@@ -218,3 +238,34 @@ popup.addEventListener("animationend", (e) => {
     popup.classList.remove("animate-popup");
   }
 });
+
+/* ---------------- FILTER TASK ---------------- */
+
+filterSection.addEventListener("click", (e) => {
+  currentFilter = e.target.dataset.filter;
+  const filteredTask = getFilteredTasks(currentFilter);
+  renderTasks(filteredTask);
+});
+
+function getFilteredTasks(currentFilter) {
+  if (currentFilter === "all") {
+    return tasks;
+  } else if (currentFilter === "active") {
+    return tasks.filter((task) => task.completed !== true);
+  } else {
+    return tasks.filter((task) => task.completed === true);
+  }
+}
+
+function clearAllContainer() {
+  allTasksContainer.innerHTML = "";
+  activeTasksContainer.innerHTML = "";
+  completedTaskContainer.innerHTML = "";
+}
+
+/* ---------------- ACTIVE TASK COUNT ---------------- */
+
+function activeTaskCount(){
+  let activeCount = tasks.filter( task => !task.completed)
+  activeTaskID.textContent = activeCount.length
+}
