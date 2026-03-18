@@ -458,4 +458,8 @@ footer {
     width: calc((100% - 10px) / 3);
     height: calc(100% - 10px);
   }
+
+  #error-popup{
+    width: 90%;
+  }
 }
